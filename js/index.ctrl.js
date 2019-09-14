@@ -54,7 +54,6 @@ $(document).ready(function () {
 
     map.addLayer(vectorLayer);
 
-
     //Add a selector control to the vectorLayer with popup functions
     //var controls = {
     //    selector: new ol.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
