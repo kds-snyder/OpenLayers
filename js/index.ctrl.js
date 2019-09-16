@@ -8,34 +8,33 @@ $(document).ready(function () {
         ],
         target: 'mapdiv',
         view: new ol.View({
-            center: ol.proj.fromLonLat([-97.6114, 38.8403]),
-            maxZoom: 18,
-            zoom: 5
+            center: ol.proj.fromLonLat([-97.6114, 38.8403]), // center on Salinas, Kansas
+            zoom: 4.6
         })
     });
 
-    // Define markers as "features" of the vector layer:
-    var features = [
-        new ol.Feature(
-            new ol.geom.Point(ol.proj.fromLonLat([-117.8491357, 33.68315])),
-            { description: 'Irvine' }
-        ),
-        new ol.Feature(
-            new ol.geom.Point(ol.proj.fromLonLat([-84.058846, 33.963502])),
-            { description: 'Lawrenceville' }
-        ),
-        new ol.Feature(
-            new ol.geom.Point(ol.proj.fromLonLat([-117.209298, 32.880391])),
-            { description: 'San Diego' },
-        ),
-
-        new ol.Feature(
-            new ol.geom.Point(ol.proj.fromLonLat([-82.351164, 27.978778])),
-            { description: 'Tampa' },
-        )
+    // Define markers as features and add them to the vector source of the vector layer
+    var markers = [
+        new ol.Feature({
+            description: 'Irvine',
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.8491357, 33.68315]))
+        }),
+        new ol.Feature({ 
+            description: 'Lawrenceville',
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-84.058846, 33.963502]))          
+        }),
+        new ol.Feature({
+            description: 'San Diego',
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.209298, 32.880391]))            
+        }),
+        new ol.Feature({ 
+            description: 'Tampa',
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-82.351164, 27.978778]))            
+        })
     ];
 
-    function iconStyleFunc() {
+    // Define marker style as image
+    function markerStyle() {
         iconStyle = [new ol.style.Style({
             image: new ol.style.Icon(({
                 scale: 0.25,
@@ -47,9 +46,9 @@ $(document).ready(function () {
 
     var vectorLayer = new ol.layer.Vector({
         source: new ol.source.Vector({
-            features: features
+            features: markers
         }),
-        style: iconStyleFunc()
+        style: markerStyle()
     });
 
     map.addLayer(vectorLayer);
