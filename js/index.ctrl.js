@@ -57,44 +57,28 @@ $(document).ready(function () {
     map.addLayer(vectorLayer);
 
     // Set popup
+    var element = document.getElementById('popup');
     var popup = new ol.Overlay({
-        element: document.getElementById('popup')
+        element: element
     });
     popup.setOffset([0, -55]);
     map.addOverlay(popup);
 
     map.on('click', function (evt) {
-        var f = map.forEachFeatureAtPixel(
-            evt.pixel,
-            function (ft, layer) { return ft; }
-        );
-        if (f && f.get('type') == 'click') {
-            console.log('clicked:');
-            console.log(f);
-            var geometry = f.getGeometry();
-            var coord = geometry.getCoordinates();
-
-            var content = '<p>' + f.get('description') + '</p>';
-
-            popup.setPosition(coord);
-
-            popup.show(coord, content);
-
-        } else { popup.hide(); }
-
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                return feature;
+            });
+        if (feature) {
+            var coordinates = feature.getGeometry().getCoordinates();
+            popup.setPosition(coordinates);
+            element.innerHTML = '<p>' + feature.get('description') + '</p>';
+            $(element).show();
+        } else {
+            $(element).destroy();
+        }
     });
-    //map.on('pointermove', function (e) {
-    //    if (e.dragging) { popup.hide(); return; }
-
-    //    var pixel = map.getEventPixel(e.originalEvent);
-    //    var hit = map.hasFeatureAtPixel(pixel);
-
-    //    console.log('map.getTarget():');
-    //    console.log(map.getTarget());
-    //    map.getTarget().style.cursor = hit ? 'pointer' : '';
-    //});
-
-
+    
     //Add a selector control to the vectorLayer with popup functions
     //var controls = {
     //    selector: new ol.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
