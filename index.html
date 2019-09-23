@@ -20,8 +20,14 @@
     <!-- OpenLayers map element -->
     <div id="mapdiv" class="map"></div>
     <div id="popup" class="ol-popup">
-        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-        <div id="popup-content"></div>
+        <div id="popup-tip"></div>
+        <div id="popup-content-container">
+            <!--
+            <a href="#" id="popup-closer" class="ol-popup-closer">x</a>
+            -->
+            <button href="#" id="popup-closer" class="ol-popup-closer">x</button>
+            <div id="popup-content"></div>
+        </div>        
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

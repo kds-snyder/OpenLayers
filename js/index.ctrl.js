@@ -72,10 +72,29 @@ $(document).ready(function () {
         if (feature) {
             var coordinates = feature.getGeometry().getCoordinates();
             popup.setPosition(coordinates);
-            element.innerHTML = '<p>' + feature.get('description') + '</p>';
+            $('#popup-content').empty();
+            $('#popup-content').append('<p>' + feature.get('description') + '</p>');
             $(element).show();
         } else {
-            $(element).destroy();
+            console.log('hiding element');
+            $(element).hide();
+        }
+    });
+
+    // change mouse cursor when over marker
+    map.on('pointermove', function (e) {
+        if (e.dragging) {
+            console.log(e);
+            $(element).hide();
+            return;
+        }
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.hasFeatureAtPixel(pixel);
+        if (hit) {
+            $('#mapdiv').css('cursor', 'pointer');
+        }
+        else {
+            $('#mapdiv').css('cursor', '');
         }
     });
     
