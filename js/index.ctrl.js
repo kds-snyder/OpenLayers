@@ -50,7 +50,6 @@ $(document).ready(function () {
         }),
         style: markerStyle()
     });
-
     map.addLayer(vectorLayer);
 
     //Add a selector control to the vectorLayer with popup functions
