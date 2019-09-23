@@ -17,19 +17,23 @@ $(document).ready(function () {
     var markers = [
         new ol.Feature({
             description: 'Irvine',
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.8491357, 33.68315]))
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.8491357, 33.68315])),
+            type: 'click'
         }),
         new ol.Feature({ 
             description: 'Lawrenceville',
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([-84.058846, 33.963502]))          
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-84.058846, 33.963502])),
+            type: 'click'
         }),
         new ol.Feature({
             description: 'San Diego',
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.209298, 32.880391]))            
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.209298, 32.880391])),
+            type: 'click'
         }),
         new ol.Feature({ 
             description: 'Tampa',
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([-82.351164, 27.978778]))            
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([-82.351164, 27.978778])),
+            type: 'click'
         })
     ];
 
@@ -53,38 +57,42 @@ $(document).ready(function () {
     map.addLayer(vectorLayer);
 
     // Set popup
-    var container = document.getElementById('popup');
-    var content = document.getElementById('popup-content');
-    var closer = document.getElementById('popup-closer');
-
-    var overlay = new ol.Overlay({
-        element: container,
-        autoPan: true,
-        autoPanAnimation: {
-            duration: 250
-        }
+    var popup = new ol.Overlay({
+        element: document.getElementById('popup')
     });
-    map.addOverlay(overlay);
+    popup.setOffset([0, -55]);
+    map.addOverlay(popup);
 
-    closer.onclick = function () {
-        overlay.setPosition(undefined);
-        closer.blur();
-        return false;
-    };
+    map.on('click', function (evt) {
+        var f = map.forEachFeatureAtPixel(
+            evt.pixel,
+            function (ft, layer) { return ft; }
+        );
+        if (f && f.get('type') == 'click') {
+            console.log('clicked:');
+            console.log(f);
+            var geometry = f.getGeometry();
+            var coord = geometry.getCoordinates();
 
-    map.on('singleclick', function (event) {
-        if (map.hasFeatureAtPixel(event.pixel) === true) {
-            console.log('event clicked:');
-            console.log(event);
-            var coordinate = event.coordinate;
+            var content = '<p>' + f.get('description') + '</p>';
 
-            content.innerHTML = '<b>Hello world!</b><br />I am a popup.';
-            overlay.setPosition(coordinate);
-        } else {
-            overlay.setPosition(undefined);
-            closer.blur();
-        }
+            popup.setPosition(coord);
+
+            popup.show(coord, content);
+
+        } else { popup.hide(); }
+
     });
+    //map.on('pointermove', function (e) {
+    //    if (e.dragging) { popup.hide(); return; }
+
+    //    var pixel = map.getEventPixel(e.originalEvent);
+    //    var hit = map.hasFeatureAtPixel(pixel);
+
+    //    console.log('map.getTarget():');
+    //    console.log(map.getTarget());
+    //    map.getTarget().style.cursor = hit ? 'pointer' : '';
+    //});
 
 
     //Add a selector control to the vectorLayer with popup functions
