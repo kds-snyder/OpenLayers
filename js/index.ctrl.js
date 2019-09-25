@@ -57,9 +57,9 @@ $(document).ready(function () {
     map.addLayer(vectorLayer);
 
     // Set popup
-    var element = document.getElementById('popup');
+    var popupElement = document.getElementById('popup');
     var popup = new ol.Overlay({
-        element: element
+        element: popupElement
     });
     popup.setOffset([0, -55]);
     map.addOverlay(popup);
@@ -74,18 +74,25 @@ $(document).ready(function () {
             popup.setPosition(coordinates);
             $('#popup-content').empty();
             $('#popup-content').append('<p>' + feature.get('description') + '</p>');
-            $(element).show();
+            $(popupElement).show();
         } else {
-            console.log('hiding element');
-            $(element).hide();
+            console.log('hiding popupElement');
+            $(popupElement).hide();
         }
     });
+
+    // close event for popup close
+    var popupCloser = document.getElementById('popup-closer');
+    popupCloser.addEventListener('click', function (evt) {
+        $(popupElement).hide();
+        evt.preventDefault();
+    }, false);
 
     // change mouse cursor when over marker
     map.on('pointermove', function (e) {
         if (e.dragging) {
             console.log(e);
-            $(element).hide();
+            $(popupElement).hide();
             return;
         }
         var pixel = map.getEventPixel(e.originalEvent);
