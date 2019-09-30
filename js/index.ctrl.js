@@ -107,7 +107,7 @@ $(document).ready(function () {
     // change mouse cursor to hand when over marker
     map.on('pointermove', function (e) {
         if (e.dragging) {
-            console.log(e);
+            //console.log(e);
             $(popupElement).hide();
             return;
         }
