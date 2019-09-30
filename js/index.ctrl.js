@@ -16,22 +16,34 @@ $(document).ready(function () {
     // Define markers as features and add them to the vector source of the vector layer
     var markers = [
         new ol.Feature({
-            description: 'Irvine',
+            address: '18100 Von Karman Avenue, Suite 1000',
+            code: 'Irvine',
+            city: 'Irvine, CA 92612, USA',
             geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.8491357, 33.68315])),
+            title: 'Irvine Towers',            
             type: 'click'
         }),
         new ol.Feature({ 
-            description: 'Lawrenceville',
+            address: '1485 Lakes Parkway',
+            code: 'Lawrenceville',
+            city: 'Lawrenceville, GA 30043, USA',
             geometry: new ol.geom.Point(ol.proj.fromLonLat([-84.058846, 33.963502])),
+            title: 'Lawrenceville (Waypoint) remote office', 
             type: 'click'
         }),
         new ol.Feature({
-            description: 'San Diego',
+            address: '9520 Towne Centre Drive',
+            code: 'SanDiego',
+            city: 'San Diego, CA 92121, USA',
             geometry: new ol.geom.Point(ol.proj.fromLonLat([-117.209298, 32.880391])),
+            title: 'San Diego (Daymon) office',
             type: 'click'
         }),
         new ol.Feature({ 
-            description: 'Tampa',
+            address: '3922 Coconut Palm Drive, #300',
+            code: 'Tampa',
+            city: 'Tampa, FL 33610, USA',
+            title: 'Tampa (Advantage Solutions) office',
             geometry: new ol.geom.Point(ol.proj.fromLonLat([-82.351164, 27.978778])),
             type: 'click'
         })
@@ -64,6 +76,7 @@ $(document).ready(function () {
     popup.setOffset([0, -55]);
     map.addOverlay(popup);
 
+    // when map clicked, get feature if marker clicked
     map.on('click', function (evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
@@ -73,7 +86,10 @@ $(document).ready(function () {
             var coordinates = feature.getGeometry().getCoordinates();
             popup.setPosition(coordinates);
             $('#popup-content').empty();
-            $('#popup-content').append('<p>' + feature.get('description') + '</p>');
+            $('#popup-content').append
+                ('<h2>' + feature.get('title') + '</h2>' +
+                    '<p>' + feature.get('address') + '</p>' +
+                    '<p>' + feature.get('city') + '</p>');
             $(popupElement).show();
         } else {
             console.log('hiding popupElement');
@@ -88,7 +104,7 @@ $(document).ready(function () {
         evt.preventDefault();
     }, false);
 
-    // change mouse cursor when over marker
+    // change mouse cursor to hand when over marker
     map.on('pointermove', function (e) {
         if (e.dragging) {
             console.log(e);
